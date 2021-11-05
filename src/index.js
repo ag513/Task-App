@@ -2,6 +2,7 @@ const express = require('express')
 require('./db/mongoose')
 const User = require('./models/user')
 const Task = require('./models/task')
+const { findByIdAndUpdate } = require('./models/user')
 
 const app = express()
 const port = process.env.PORT || 3001
@@ -67,6 +68,21 @@ app.get('/users/:id', async (req, res) => {
     // }).catch((e) => {
     //     res.status(500).send()
     // })
+})
+
+
+app.patch('/users/:id', async (req, res) => {
+    try {
+
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+        if (!user) {
+            return res.status(404).send()
+        }
+        res.send(user)
+
+    } catch (e) {
+        res.status(400).send(e)
+    }
 })
 
 app.post('/tasks', async (req, res) => {
