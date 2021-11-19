@@ -1,7 +1,7 @@
 const request = require('supertest')
 const app = require('../src/app')
 const Task = require('../src/models/task')
-const { userOne, userOneId, setUpDB } = require('./fixtures/db')
+const { userOne, userTwo, userOneId, setUpDB } = require('./fixtures/db')
 
 beforeEach(setUpDB)
 test('should create a task for user', async () => {
@@ -15,5 +15,14 @@ test('should create a task for user', async () => {
 
     const task = await Task.findById(response.body._id)
     expect(task).not.toBeNull()
-    expect(task.completed).toEqual(false)
+    expect(task.completed).toBe(false)
+})
+
+test('should fetch users tasks', async () => {
+    const response = await request(app)
+        .get('tasks')
+        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .send()
+        .expect(200)
+    expect(response.body.length).toBe(1)
 })

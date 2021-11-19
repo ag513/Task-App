@@ -59,5 +59,9 @@ const setUpDB = async () => {
 module.exports = {
     userOneId,
     userOne,
-    setUpDB
+    setUpDB,
+    userTwo,
+    TaskOne,
+    TaskTwo,
+    TaskThree
 }
